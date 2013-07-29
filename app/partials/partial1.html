@@ -3,6 +3,9 @@
   <br/>
   <button id="login" ng-click="login()">Log In</button>
   <ul>    
-    <li ng-repeat="friend in friends">{{friend.name}}</li>
+    <li ng-repeat="friend in friends">
+      <img src="{{friend.picture.data.url}}"></img>
+      {{friend.name}}
+    </li>
   </ul>
 </div>

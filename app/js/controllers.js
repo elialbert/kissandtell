@@ -34,7 +34,7 @@ angular.module('myApp.controllers',[]).
 		if (resp.data) {
 		    _.each(resp.data, function(el) {
 			// console.dir(el);
-			datastore.push(el);
+			datastore.child(el.id).update(el);
 		    });
 		    if (resp.paging) {
 			next = resp.paging.next;
@@ -57,6 +57,10 @@ angular.module('myApp.controllers',[]).
 	    var friendsDB = new Firebase(url);
 	    fbPager(friendsDB, "/me/friends", 0);
 	    var promise = angularFire(url, $scope, 'friends', {});
+	    
+	    
+
+
 	}
 
 
