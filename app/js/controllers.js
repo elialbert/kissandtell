@@ -3,64 +3,30 @@
 /* Controllers */
 
 angular.module('myApp.controllers',[]).
-    controller('MyCtrl1', ["$scope", "angularFire", function($scope, angularFire) {
-	var data = new Firebase("https://creaturefeature.firebaseIO.com");
-	var auth = new FirebaseSimpleLogin(data, function(error, user) {
-	    if (error) {
-		// an error occurred while attempting login
-		console.log(error);
-	    } else if (user) {
-		// user authenticated with Firebase
-		console.log('User ID: ' + user.id + ', Provider: ' + user.provider);
-		loadFriends(user.id);
-	    } else {
-	      // user is logged out
-	      console.log("not logged in");
-	    }
+    controller('MyCtrl1', ["$scope", "angularFire", "fbData", "authService", function($scope, angularFire, fbData, authService) {
+	
+	// pass the data setup to the login callback
+	authService.login( function(userId) {
+	    loadData(userId);
+	    fbData.getEvents(userId);
 	});
 
-
+	// the click handler to login
 	$scope.login = function() {
-	    auth.login('facebook', {
-		rememberMe: true,
-		scope: "email,friends_photos",
-	    });
+	    authService.loginSetup();
 	}
 
-	var fbPager = function(datastore, baseUrl, offset) { 
-            var next = true;
-	    FB.api(baseUrl + "?limit=500&fields=name,id,picture&offset="+offset, function(resp) { 
-		console.log("running with offset " + offset );
-		if (resp.data) {
-		    _.each(resp.data, function(el) {
-			// console.dir(el);
-			datastore.child(el.id).update(el);
-		    });
-		    if (resp.paging) {
-			next = resp.paging.next;
-		    }
-		    else {
-			next = false;
-		    }
-		    offset = offset + 500;
-		    if (next) {
-			console.log("going to next page");
-			fbPager(datastore, baseUrl,offset);
-		    }
-		} 
-	    });
-	}
+
 
 	
-	var loadFriends = function(userId) { 
-	    var url = "https://creaturefeature.firebaseIO.com/kissandtell/friends/"+userId;
-	    var friendsDB = new Firebase(url);
-	    fbPager(friendsDB, "/me/friends", 0);
-	    var promise = angularFire(url, $scope, 'friends', {});
+	var loadData = function(userId) { 
+	    //var url = "https://creaturefeature.firebaseIO.com/kissandtell/friends/"+userId;
+	    //var friendsDB = new Firebase(url);
+	    //fbPager(friendsDB, "/me/friends?limit=500&fields=name,id,picture", 0);
+	    //var promise = angularFire(url, $scope, 'friends', {});
 	    
-	    
-
-
+	    var url = "https://creaturefeature.firebaseIO.com/events/"+userId;
+	    var promise = angularFire(url, $scope, 'events', {}); 	    
 	}
 
 
