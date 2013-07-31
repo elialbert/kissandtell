@@ -2,7 +2,7 @@
 
 /* Services */
 
-angular.module('myApp.services', ['firebase']).
+angular.module('3vent.services', ['firebase']).
     service("fbData", function() {
 
 	var data = null;
@@ -69,7 +69,7 @@ angular.module('myApp.services', ['firebase']).
     });
 	   
 
-
+//old
 	var fbPager = function(datastore, baseUrl, offset) { 
             var next = true;
 	    FB.api(baseUrl + "&offset=" +offset, function(resp) { 
