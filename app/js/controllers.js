@@ -18,8 +18,21 @@ angular.module('3vent.controllers',[]).
 
 	var loadData = function(userId) { 
 	    var url = "https://creaturefeature.firebaseIO.com/events/"+userId;
-	    var promise = angularFire(url, $scope, 'events', {}); 	    
+	    var promise = angularFire(url, $scope, 'eventsRaw', {});
+	    // change events to an array bc thats how angular likes it
+ 	    promise.then(function() {
+		$scope.events = [];
+		for (var key in $scope.eventsRaw) {
+		    $scope.events.push($scope.eventsRaw[key]);
+		}
+	    });    
 	}
+	
+	$scope.filters = {
+	    'numMembers': function(event) {
+		return event.all_members_count > 1000;
+	    }
+	};
 
   }])
   .controller('MyCtrl2', [function() {

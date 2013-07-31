@@ -3,8 +3,8 @@
   <br/>
   <button id="login" ng-click="login()">Log In</button>
   <ul>    
-    <li ng-repeat="event in events">
-      {{event.eid}}
+    <li ng-repeat="event in events | filter:filters.numMembers">
+      {{event.name}} - {{event.all_members_count}}
     </li>
   </ul>
 </div>
