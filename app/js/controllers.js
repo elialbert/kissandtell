@@ -8,7 +8,7 @@ angular.module('3vent.controllers',[]).
 	// pass the data setup to the login callback
 	authService.login( function(userId) {
 	    loadData(userId);
-	    fbData.getEvents(userId);
+	    // fbData.getEvents(userId);
 	});
 
 	// the click handler to login
@@ -28,10 +28,35 @@ angular.module('3vent.controllers',[]).
 	    });    
 	}
 	
-	$scope.filters = {
-	    'numMembers': function(event) {
-		return event.all_members_count > 1000;
+	$scope.filters = function(event) {
+	    //console.log("scope info: " + $scope.minInvited + ", " + $scope.maxInvited + ", " + $scope.textSearchQuery);
+	    var res1 = numMembers(event)
+	    var res2 = textSearch(event);
+	    // console.log ("res1 is " + res1 + " and res2 is " + res2);
+	    return res1 && res2;
+
+	}
+
+	var numMembers = function(event) {
+	    if ($scope.minInvited && event.all_members_count < parseInt($scope.minInvited)) {
+		return false;
 	    }
+	    if ($scope.maxInvited && event.all_members_count > parseInt($scope.maxInvited)) {
+		return false;
+	    }
+	    if ($scope.minAttending && event.attending_count < parseInt($scope.minAttending)) {
+		return false;
+	    }
+	    if ($scope.maxAttending && event.attending_count > parseInt($scope.maxAttending)) {
+		return false;
+	    }
+	    return true;
+	}
+	var textSearch = function(event) {
+	    if (!$scope.textSearchQuery) {
+		return true;
+	    }
+	    return event.name.toLowerCase().indexOf($scope.textSearchQuery.toLowerCase()) >= 0 || event.description.toLowerCase().indexOf($scope.textSearchQuery.toLowerCase()) >= 0;
 	};
 
   }])

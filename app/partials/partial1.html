@@ -1,10 +1,68 @@
 <div class="container">
-  test: <div id="testdiv"></div>
-  <br/>
-  <button id="login" ng-click="login()">Log In</button>
-  <ul>    
-    <li ng-repeat="event in events | filter:filters.numMembers">
-      {{event.name}} - {{event.all_members_count}}
-    </li>
-  </ul>
+    <div class="pull-right">  
+      <button id="login" ng-click="login()">Log In</button>
+    </div>
+
+  <div class="row">
+    <h1>3vent</h1>
+
+  </div>
+  <div class="row">
+    <!-- filters -->
+    <div class="col-lg-3">
+      <div class="row">
+	<h3>Who</h3>
+	<div class="row">
+	  Number of people invited:
+	  Min: <input type="text" ng-model="minInvited"></input>  
+	  Max: <input type="text" ng-model="maxInvited"></input>  
+
+	  Number of people attending:
+	  Min: <input type="text" ng-model="minAttending"></input>  
+	  Max: <input type="text" ng-model="maxAttending"></input>  
+
+	</div>
+      </div>
+
+      <div class="row">
+	<h3>What</h3>
+	<div class="row">
+	  Search for text:
+	  <input type="text" ng-model="textSearchQuery"></input>
+	</div>
+      </div>
+
+      <div class="row">
+	<h3>Where</h3>
+	<div class="row">
+	  where here
+	</div>
+      </div>
+
+      <div class="row">
+	<h3>When</h3>
+	<div class="row">
+	  when here
+	</div>
+      </div>
+
+      <div class="row">
+	<h3>Why</h3>
+	<div class="row">
+	  why here
+	</div>
+      </div>
+
+
+    </div>
+
+    <!-- list display -->
+    <div class="col-lg-9">
+      <ul>    
+	<li ng-repeat="event in events | filter:filters">
+	  {{event.name}} - {{event.all_members_count}}
+	</li>
+      </ul>
+
+    </div>
 </div>
