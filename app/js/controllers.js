@@ -5,6 +5,11 @@
 angular.module('3vent.controllers',[]).
     controller('filterCtrl', ["$scope", "angularFire", "fbData", "authService", function($scope, angularFire, fbData, authService) {
 	
+	$scope.pagedEvents = [];
+	$scope.currentPage = 1;
+	$scope.numPerPage = 10;
+	$scope.maxSize = 5;
+
 	// pass the data setup to the login callback
 	authService.login( function(userId) {
 	    loadData(userId);
@@ -25,6 +30,11 @@ angular.module('3vent.controllers',[]).
 		for (var key in $scope.eventsRaw) {
 		    $scope.events.push($scope.eventsRaw[key]);
 		}
+
+		$scope.numPages = function () {
+		    return Math.ceil($scope.events.length / $scope.numPerPage);
+		};
+
 	    });    
 	}
 	

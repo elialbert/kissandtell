@@ -71,10 +71,12 @@
     <div class="col-lg-7" id="eventList">
       <div class="row">
 	<ul>    
-	  <li ng-repeat="event in events | filter:filters">
+	  <li ng-repeat="event in events | filter:filters | startFrom:currentPage*numPerPage | limitTo:numPerPage">
 	    {{event.name}} - {{event.all_members_count}}
 	  </li>
 	</ul>
+	<!-- <pagination num-pages="numEvents()" current-page="currentPage" max-size="maxSize" boundary-links="true"></div> -->
+	<pager num-pages="numPages()" current-page="currentPage"></pager>
       </div>
     </div>
 </div>
