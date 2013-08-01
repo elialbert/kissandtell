@@ -9,47 +9,58 @@
   </div>
   <div class="row">
     <!-- filters -->
-    <div class="col-lg-3">
+    <div class="col-lg-3 navbar">
       <div class="row">
-	<h3>Who</h3>
-	<div class="row">
-	  Number of people invited:
-	  Min: <input type="text" ng-model="minInvited"></input>  
-	  Max: <input type="text" ng-model="maxInvited"></input>  
-
-	  Number of people attending:
-	  Min: <input type="text" ng-model="minAttending"></input>  
-	  Max: <input type="text" ng-model="maxAttending"></input>  
-
+	<div class="filterHeader">Who</div>
+	<div class="filterBody col-lg-12">
+	  <div class="row"> 
+	    Number of people invited:
+	    <br/>
+	    Min: <input type="text" ng-model="minInvited" class="numInput"></input>  
+	    Max: <input type="text" ng-model="maxInvited" class="numInput"></input>  
+	  </div>
+	  <div class="row"> 	
+	    Number of people attending:
+	    <br/>
+	    Min: <input type="text" ng-model="minAttending" class="numInput"></input>  
+	    Max: <input type="text" ng-model="maxAttending" class="numInput"></input>  
+	  </div>
 	</div>
       </div>
 
       <div class="row">
-	<h3>What</h3>
-	<div class="row">
-	  Search for text:
-	  <input type="text" ng-model="textSearchQuery"></input>
+	<div class="filterHeader">What</div>
+	<div class="filterBody col-lg-12">
+	  <div class="row">
+	    Search for text:
+	    <input type="text" ng-model="textSearchQuery"></input>
+	  </div>
 	</div>
       </div>
 
       <div class="row">
-	<h3>Where</h3>
-	<div class="row">
-	  where here
+	<div class="filterHeader">Where</div>
+	<div class="filterBody col-lg-12">
+	  <div class="row">
+	    where here
+	  </div>
+	</div>
+      </div>
+      <div class="row">
+	<div class="filterHeader">When</div>
+	<div class="filterBody col-lg-12">
+	  <div class="row">
+	    when here
+	  </div>
 	</div>
       </div>
 
       <div class="row">
-	<h3>When</h3>
-	<div class="row">
-	  when here
-	</div>
-      </div>
-
-      <div class="row">
-	<h3>Why</h3>
-	<div class="row">
-	  why here
+	<div class="filterHeader">Why</div>
+	<div class="filterBody col-lg-12">
+	  <div class="row">
+	    why here 
+	  </div>
 	</div>
       </div>
 
@@ -57,12 +68,13 @@
     </div>
 
     <!-- list display -->
-    <div class="col-lg-9">
-      <ul>    
-	<li ng-repeat="event in events | filter:filters">
-	  {{event.name}} - {{event.all_members_count}}
-	</li>
-      </ul>
-
+    <div class="col-lg-7" id="eventList">
+      <div class="row">
+	<ul>    
+	  <li ng-repeat="event in events | filter:filters">
+	    {{event.name}} - {{event.all_members_count}}
+	  </li>
+	</ul>
+      </div>
     </div>
 </div>

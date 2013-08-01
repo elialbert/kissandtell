@@ -28,3 +28,36 @@
   content: "";
   padding: 0;
 }
+
+.numInput {
+  width: 40px;
+}
+
+.filterHeader {
+  font-size: 24px; 
+  margin-buttom: 10px;
+  background-color: #FFED61;
+  color: #5D2EFF;
+}
+
+.filterBody {
+  background-color: #4FE8AA;
+  color: #5D2EFF;
+}
+
+.navbar {
+  background-color: #FFED61;
+}
+
+#eventList {
+  background-color: #6F54FF;
+  color: #FFED61;
+}
+
+/*
+5D2EFF
+4FE8AA
+FFED61
+E82909
+6F54FF
+*/
