@@ -54,6 +54,16 @@
   color: #FFED61;
 }
 
+.eventListBox {
+  background-color: #E82909;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.eventListUL {
+  list-style-type: none;
+}
+
 /*
 5D2EFF
 4FE8AA
