@@ -42,7 +42,8 @@
 	<div class="filterHeader">Where</div>
 	<div class="filterBody col-lg-12">
 	  <div class="row">
-	    where here
+	    Search for a location:
+	    <input type="text" ng-model="locationSearchQuery"></input>
 	  </div>
 	</div>
       </div>
@@ -50,7 +51,12 @@
 	<div class="filterHeader">When</div>
 	<div class="filterBody col-lg-12">
 	  <div class="row">
-	    when here
+	    starts after:
+	    <datepicker ng-model="dtStarts" show-weeks="true" starting-day="1" max="'2015-06-22'"></datepicker>
+
+	    ends before:
+	    <datepicker ng-model="dtEnds" show-weeks="true" starting-day="1" max="'2015-06-22'"></datepicker>
+
 	  </div>
 	</div>
       </div>
@@ -74,7 +80,7 @@
 	  <ul class="eventListUL">    
 	    <li ng-repeat="event in events | filter:filters | startFrom:(currentPage-1)*numPerPage | limitTo:numPerPage">
 	      <div class="row eventListBox">
-		{{event.name}} - {{event.attending_count}}
+		{{event.name}} - {{event.location}}
 	      </div>
 	    </li>
 	  </ul>

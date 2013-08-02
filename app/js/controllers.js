@@ -10,6 +10,10 @@ angular.module('3vent.controllers',[]).
 	$scope.numPerPage = 10;
 	$scope.maxSize = 5;
 
+	$scope.dtStarts = new Date();
+	var dt = new Date();
+	$scope.dtEnds = new Date(dt.getFullYear(), dt.getMonth(), dt.getDate() + 7);
+
 	// pass the data setup to the login callback
 	authService.login( function(userId) {
 	    loadData(userId);
@@ -40,10 +44,12 @@ angular.module('3vent.controllers',[]).
 	
 	$scope.filters = function(event) {
 	    //console.log("scope info: " + $scope.minInvited + ", " + $scope.maxInvited + ", " + $scope.textSearchQuery);
-	    var res1 = numMembers(event)
+	    var res1 = numMembers(event);
 	    var res2 = textSearch(event);
+	    var res3 = dateFilters(event);
+	    var res4 = locationFilters(event);
 	    // console.log ("res1 is " + res1 + " and res2 is " + res2);
-	    return res1 && res2;
+	    return res1 && res2 && res3 && res4;
 
 	}
 
@@ -70,9 +76,34 @@ angular.module('3vent.controllers',[]).
 	};
 
 	var dateFilters = function(event) { 
-	    // Date.parse(event.start_date);
+	    var start = Date.parse(event.start_time);
+	    var end = Date.parse(event.end_time);
+	    if ((start < $scope.dtStarts) || (end > $scope.dtEnds)) {
+		return false;
+	    }
 	    return true;
 	}
+
+	var locationFilters = function(event) {
+	    if (!$scope.locationSearchQuery) {
+		return true;
+	    }
+	    var venMatch = false;
+	    var locMatch = event.location && event.location.toLowerCase().indexOf($scope.locationSearchQuery.toLowerCase()) >= 0;
+	    if (locMatch) {
+		return true;
+	    }
+	    if (event.venue) {
+		var venueString = '';
+		for (var key in event.venue) { 
+		    venueString = venueString + " " + event.venue[key]
+		}
+		venMatch = venueString.toLowerCase().indexOf($scope.locationSearchQuery.toLowerCase()) >= 0;
+		return venMatch
+	    }
+	    return false; //maybe true for nonloc events?
+	    
+	};
 
   }])
   .controller('MyCtrl2', [function() {
