@@ -69,6 +69,11 @@ angular.module('3vent.controllers',[]).
 	    return event.name.toLowerCase().indexOf($scope.textSearchQuery.toLowerCase()) >= 0 || event.description.toLowerCase().indexOf($scope.textSearchQuery.toLowerCase()) >= 0;
 	};
 
+	var dateFilters = function(event) { 
+	    // Date.parse(event.start_date);
+	    return true;
+	}
+
   }])
   .controller('MyCtrl2', [function() {
 
