@@ -9,83 +9,66 @@
   </div>
   <div class="row">
     <!-- filters -->
-    <div class="col-lg-3 navbar">
-      <div class="row">
-	<div class="filterHeader">Who</div>
-	<div class="filterBody col-lg-12">
-	  <div class="row"> 
-	    Number of people invited:
-	    <br/>
-	    Min: <input type="text" ng-model="minInvited" class="numInput"></input>  
-	    Max: <input type="text" ng-model="maxInvited" class="numInput"></input>  
-	  </div>
-	  <div class="row"> 	
-	    Number of people attending:
-	    <br/>
-	    Min: <input type="text" ng-model="minAttending" class="numInput"></input>  
-	    Max: <input type="text" ng-model="maxAttending" class="numInput"></input>  
-	  </div>
+    <div class="col-lg-3 ">
+      <div class="panel panel-info">
+	<div class="panel-heading">
+	  <h3>Who</h3>
 	</div>
+	
+	Number of people invited:
+	<br/>
+	Min: <input type="text" ng-model="minInvited" class="numInput"></input>  
+	Max: <input type="text" ng-model="maxInvited" class="numInput"></input>  
+
+	
+	Number of people attending:
+	<br/>
+	Min: <input type="text" ng-model="minAttending" class="numInput"></input>  
+	Max: <input type="text" ng-model="maxAttending" class="numInput"></input>  
       </div>
 
-      <div class="row">
-	<div class="filterHeader">What</div>
-	<div class="filterBody col-lg-12">
-	  <div class="row">
-	    Search for text:
-	    <input type="text" ng-model="textSearchQuery"></input>
-	  </div>
+      <div class="panel panel-info">
+	<div class="panel-heading">
+	  <h3>What</h3>
 	</div>
+	Search for text:
+	<input type="text" ng-model="textSearchQuery"></input>
       </div>
 
-      <div class="row">
-	<div class="filterHeader">Where</div>
-	<div class="filterBody col-lg-12">
-	  <div class="row">
-	    Search for a location:
-	    <input type="text" ng-model="locationSearchQuery"></input>
-	  </div>
+      <div class="panel panel-info">
+	<div class="panel-heading">
+	  <h3>Where</h3>
 	</div>
-      </div>
-      <div class="row">
-	<div class="filterHeader">When</div>
-	<div class="filterBody col-lg-12">
-	  <div class="row">
-	    starts after:
-	    <datepicker ng-model="dtStarts" show-weeks="true" starting-day="1" max="'2015-06-22'"></datepicker>
-
-	    ends before:
-	    <datepicker ng-model="dtEnds" show-weeks="true" starting-day="1" max="'2015-06-22'"></datepicker>
-
-	  </div>
-	</div>
+	  Search for a location:
+	  <input type="text" ng-model="locationSearchQuery"></input>
       </div>
 
-      <div class="row">
-	<div class="filterHeader">Why</div>
-	<div class="filterBody col-lg-12">
-	  <div class="row">
-	    why here 
+	<div class="panel panel-info">
+	  <div class="panel-heading">
+	    <h3>When</h3>
 	  </div>
-	</div>
-      </div>
+	  starts after:
+	  <datepicker ng-model="dtStarts" show-weeks="true" starting-day="1" max="'2015-06-22'"></datepicker>
+	  
+	  ends before:
+	  <datepicker ng-model="dtEnds" show-weeks="true" starting-day="1" max="'2015-06-22'"></datepicker>
 
+	</div>
 
     </div>
 
     <!-- list display -->
-    <div class="col-lg-7" id="eventList">
-      <div class="row">
-	<div class="col-lg-12">
-	  <ul class="eventListUL">    
-	    <li ng-repeat="event in events | filter:filters | startFrom:(currentPage-1)*numPerPage | limitTo:numPerPage">
-	      <div class="row eventListBox">
-		{{event.name}} - {{event.location}}
-	      </div>
-	    </li>
-	  </ul>
-	</div>
-      </div>
+    <div class="col-lg-9" id="eventList">
+      <ul class="eventListUL">    
+	<li ng-repeat="event in events | filter:filters | startFrom:(currentPage-1)*numPerPage | limitTo:numPerPage">
+	  <div class="panel panel-primary">
+	    <div class="panel-heading">
+	      <h4>{{event.name}}</h4>
+	    </div>
+	    {{event.description.slice(0,200)+ "..."}} - {{event.location}}
+	  </div>
+	</li>
+      </ul>
     </div>
   </div>
   <div class="row filterBody">

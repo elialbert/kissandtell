@@ -41,8 +41,8 @@
 }
 
 .filterBody {
-  background-color: #4FE8AA;
-  color: #5D2EFF;
+  /*background-color: #4FE8AA;
+  color: #5D2EFF;*/
 }
 
 .navbar {
@@ -50,8 +50,7 @@
 }
 
 #eventList {
-  background-color: #6F54FF;
-  color: #FFED61;
+
 }
 
 .eventListBox {
