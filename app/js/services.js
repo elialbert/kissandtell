@@ -16,7 +16,8 @@ angular.module('3vent.services', ['firebase']).
 		{
 		    method: 'fql.query',
 		    //query: 'SELECT uid2 FROM friend WHERE uid1=me()'
-		    query: 'SELECT eid, name, description, start_time, location, all_members_count, attending_count, creator, declined_count, end_time, has_profile_pic, host, pic, pic_big, venue FROM event WHERE eid IN (SELECT eid FROM event_member WHERE uid IN (SELECT uid2 FROM friend WHERE uid1=me())) limit 50'
+		    query: 'SELECT eid, name, description, start_time, location, all_members_count, attending_count, creator, declined_count, end_time, has_profile_pic, host, pic_square, venue FROM event WHERE eid IN (SELECT eid FROM event_member WHERE uid IN (SELECT uid2 FROM friend WHERE uid1=me())) limit 10'
+		    //query: 'SELECT eid, name  FROM event WHERE eid IN (SELECT eid FROM event_member WHERE uid IN (SELECT uid2 FROM friend WHERE uid1=me())) limit 10'
 		},
 		function(resp) {
 		    console.log("got the events!");

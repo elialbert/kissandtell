@@ -17,7 +17,7 @@ angular.module('3vent.controllers',[]).
 	// pass the data setup to the login callback
 	authService.login( function(userId) {
 	    loadData(userId);
-	    // fbData.getEvents(userId);
+	    fbData.getEvents(userId);
 	});
 
 	// the click handler to login
@@ -32,7 +32,16 @@ angular.module('3vent.controllers',[]).
  	    promise.then(function() {
 		$scope.events = [];
 		for (var key in $scope.eventsRaw) {
-		    $scope.events.push($scope.eventsRaw[key]);
+		    // event preprocessing
+		    var e = $scope.eventsRaw[key];
+		    var d = Date(e.start_time);
+		    e.pretty_start = dateFormat(d, "dddd, mmmm dS, yyyy, h:MM TT Z")
+		    e.venueString = '';
+		    for (var key in e.venue) { 
+			e.venueString = e.venueString + ", " + e.venue[key];
+		    }
+		    e.pretty_location = e.location || e.venueString;
+		    $scope.events.push(e);
 		}
 
 		$scope.numPages = function () {
@@ -52,6 +61,10 @@ angular.module('3vent.controllers',[]).
 	    return res1 && res2 && res3 && res4;
 
 	}
+
+	$scope.sortFunc = function(event) {
+	    return Date.parse(event.start_time);
+	};
 
 	var numMembers = function(event) {
 	    if ($scope.minInvited && event.all_members_count < parseInt($scope.minInvited)) {
@@ -88,21 +101,7 @@ angular.module('3vent.controllers',[]).
 	    if (!$scope.locationSearchQuery) {
 		return true;
 	    }
-	    var venMatch = false;
-	    var locMatch = event.location && event.location.toLowerCase().indexOf($scope.locationSearchQuery.toLowerCase()) >= 0;
-	    if (locMatch) {
-		return true;
-	    }
-	    if (event.venue) {
-		var venueString = '';
-		for (var key in event.venue) { 
-		    venueString = venueString + " " + event.venue[key]
-		}
-		venMatch = venueString.toLowerCase().indexOf($scope.locationSearchQuery.toLowerCase()) >= 0;
-		return venMatch
-	    }
-	    return false; //maybe true for nonloc events?
-	    
+	    return event.pretty_location && event.pretty_location.toLowerCase().indexOf($scope.locationSearchQuery.toLowerCase()) >= 0;
 	};
 
   }])

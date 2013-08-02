@@ -60,12 +60,20 @@
     <!-- list display -->
     <div class="col-lg-9" id="eventList">
       <ul class="eventListUL">    
-	<li ng-repeat="event in events | filter:filters | startFrom:(currentPage-1)*numPerPage | limitTo:numPerPage">
+	<li ng-repeat="event in events | filter:filters | startFrom:(currentPage-1)*numPerPage | limitTo:numPerPage | orderBy:sortFunc">
 	  <div class="panel panel-primary">
 	    <div class="panel-heading">
 	      <h4>{{event.name}}</h4>
 	    </div>
-	    {{event.description.slice(0,200)+ "..."}} - {{event.location}}
+	      <img src="{{event.pic_square}}" class="pull-right"></img>
+
+	      <ul class="eventInner">
+		<li><strong>Starts:</strong> {{event.pretty_start}}</li>
+		<li><strong>Location:</strong> {{event.pretty_location}}
+	      </ul>
+	    <br/>
+	      {{event.description.slice(0,200)+ "..."}} 
+
 	  </div>
 	</li>
       </ul>
