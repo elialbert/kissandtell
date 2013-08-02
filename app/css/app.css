@@ -53,6 +53,12 @@
 
 }
 
+.eventImg {
+    width: 100px;
+    height: 100px;
+    overflow: hidden;
+}
+
 .eventListBox {
   background-color: #E82909;
   margin-top: 10px;
