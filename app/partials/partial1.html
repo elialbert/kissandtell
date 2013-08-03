@@ -9,7 +9,7 @@
   </div>
   <div class="row">
     <!-- filters -->
-    <div class="col-lg-3 ">
+    <div class="col-lg-4">
       <div class="panel panel-info">
 	<div class="panel-heading">
 	  <h3>Who</h3>
@@ -58,12 +58,12 @@
     </div>
 
     <!-- list display -->
-    <div class="col-lg-9" id="eventList">
+    <div class="col-lg-8" id="eventList">
       <ul class="eventListUL">    
 	<li ng-repeat="event in events | filter:filters | startFrom:(currentPage-1)*numPerPage | limitTo:numPerPage | orderBy:sortFunc">
 	  <div class="panel panel-primary">
 	    <div class="panel-heading">
-	      <h4>{{event.name}}</h4>
+	      <a class="eventLink" href="http://facebook.com/events/{{event.eid}}"><h4>{{event.name}}</h4></a>
 	    </div>
 	      <img src="{{event.pic}}" class="pull-right eventImg"></img>
 
@@ -73,6 +73,7 @@
 	      </ul>
 	    <br/>
 	      {{event.description.slice(0,200)+ "..."}} 
+	      
 
 	  </div>
 	</li>
