@@ -4,31 +4,69 @@
 
 angular.module('3vent.services', ['firebase']).
     service("fbData", function() {
-
-	var data = null;
 	console.log("running loaddata service");
-	var getEventsInner = function(userId) {
-	    var url = "https://creaturefeature.firebaseIO.com/events/"+userId;
-	    var eventsDB = new Firebase(url);
 
-	    console.log("running getevents inner");
+	var getEventsLooper = function(idx, eventsDB, refreshDB) {
+	    console.log("in getEventsLooper, idx is " + idx);
 	    FB.api(
 		{
 		    method: 'fql.query',
-		    //query: 'SELECT uid2 FROM friend WHERE uid1=me()'
-		    query: 'SELECT eid, name, description, start_time, location, all_members_count, attending_count, creator, declined_count, end_time, has_profile_pic, host, pic, venue FROM event WHERE eid IN (SELECT eid FROM event_member WHERE uid IN (SELECT uid2 FROM friend WHERE uid1=me() limit 200)) limit 50'
-		    //query: 'SELECT eid, name  FROM event WHERE eid IN (SELECT eid FROM event_member WHERE uid IN (SELECT uid2 FROM friend WHERE uid1=me())) limit 10'
+		    //query: 'SELECT uid2 FROM friend WHERE uid1=me()' // for testing
+		    query: "SELECT eid, name, description, start_time, location, all_members_count, attending_count, creator, declined_count, end_time, has_profile_pic, host, pic, venue FROM event WHERE eid IN (SELECT eid FROM event_member WHERE uid IN (SELECT uid2 FROM friend WHERE uid1=me() limit 100 offset " + idx*100 + "))"
 		},
 		function(resp) {
-		    console.log("got the events!");
-		    console.dir(resp);
+		    console.log("got the events! " + resp.length);
+		    if (!resp.length) {
+			console.log("all fresh out!");
+			refreshDB.update({'latest':new Date()});
+			return;
+		    }
+		    if (idx == 10) {
+			console.log("breaking prematurely");
+			return;
+		    }
+		    var data = {};
+		    console.log("preparing event data to update");
 		    _.each(resp, function(el) {
-			eventsDB.child(el.eid).update(el);
+			// eventsDB.child(el.eid).update(el); //very slow way
+			data[el.eid] = el;
 		    });
+		    console.log("running big update");
+		    eventsDB.update(data);
+		    console.log("done with big update");
+		    return getEventsLooper(idx+1, eventsDB, refreshDB);
 		    
 
 		}
 	    );
+	}
+
+	var getEventsInner = function(userId) {
+	    console.log("running getevents inner");
+	    var eventsUrl = "https://creaturefeature.firebaseIO.com/events/"+userId;
+	    var refreshUrl = "https://creaturefeature.firebaseIO.com/refresh/"+userId;
+	    var eventsDB = new Firebase(eventsUrl);
+	    var refreshDB = new Firebase(refreshUrl);
+
+	    refreshDB.on('value', function(snapshot) { 
+		console.log("got snapshot");
+		if (snapshot.val()) {
+		    var latestDate = Date.parse(snapshot.val().latest);
+		    var now = new Date();
+		    console.log ("found latest date " + latestDate); 
+		    if ((now - latestDate) < 120*60*1000 ) { 
+			console.log ("refreshed in the last hour!");
+			return
+		    }
+		}
+		console.log ("on to eventsl ooperS");
+		getEventsLooper(0, eventsDB, refreshDB);
+	    });
+
+
+
+
+
 	}
 
 	return {
