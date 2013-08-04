@@ -50,6 +50,7 @@ angular.module('3vent.services', ['firebase']).
 
 	    refreshDB.on('value', function(snapshot) { 
 		console.log("got snapshot");
+		refreshDB.off('value')
 		if (snapshot.val()) {
 		    var latestDate = Date.parse(snapshot.val().latest);
 		    var now = new Date();
