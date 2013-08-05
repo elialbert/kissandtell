@@ -26,10 +26,10 @@
   </div>
   <div class="row">
     <!-- filters -->
-    <div class="col-lg-4">
+    <div class="col-lg-3">
       <div class="panel panel-info">
 	<div class="panel-heading">
-	  <h3>Who</h3>
+	  <span class="navHeader">Who</span>
 	</div>
 	
 	Number of people invited:
@@ -46,7 +46,7 @@
 
       <div class="panel panel-info">
 	<div class="panel-heading">
-	  <h3>What</h3>
+	  <span class="navHeader">What</span>
 	</div>
 	Search for text:
 	<input type="text" ng-model="textSearchQuery"></input>
@@ -54,7 +54,7 @@
 
       <div class="panel panel-info">
 	<div class="panel-heading">
-	  <h3>Where</h3>
+	  <span class="navHeader">Where</span>
 	</div>
 	  Search for a location:
 	  <input type="text" ng-model="locationSearchQuery"></input>
@@ -62,7 +62,7 @@
 
 	<div class="panel panel-info">
 	  <div class="panel-heading">
-	    <h3>When</h3>
+	    <span class="navHeader">When</span>
 	  </div>
 	  starts after:
 	  <datepicker ng-model="dtStarts" show-weeks="true" starting-day="1" max="'2015-06-22'"></datepicker>
@@ -75,8 +75,9 @@
     </div>
 
     <!-- list display -->
-    <div class="col-lg-8" id="eventList">
-      <span class="pull-right">Found: {{filteredVar.length}} </span>
+    <div class="col-lg-9" id="eventList">
+      <span class="pull-right" ng-show="filteredVar.length">Found: {{filteredVar.length}} </span>
+      <span class="pull-right" ng-show="!events.length">Loading...</span>
       <ul class="eventListUL">    
 	<li ng-repeat="event in (filteredVar = (events | filter:filters) | startFrom:(currentPage-1)*numPerPage | limitTo:numPerPage | orderBy:sortFunc)">
 	  <div class="panel panel-primary">
