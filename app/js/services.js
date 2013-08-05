@@ -5,8 +5,10 @@
 angular.module('3vent.services', ['firebase']).
     service("fbData", function() {
 	console.log("running loaddata service");
-
+	var pullingFB = {};
 	var getEventsLooper = function(idx, eventsDB, refreshDB) {
+	    console.log("setting pullingfb to true");
+	    pullingFB.status=true;
 	    console.log("in getEventsLooper, idx is " + idx);
 	    FB.api(
 		{
@@ -19,10 +21,12 @@ angular.module('3vent.services', ['firebase']).
 		    if (!resp.length) {
 			console.log("all fresh out!");
 			refreshDB.update({'latest':new Date()});
+			pullingFB.status = false;
 			return;
 		    }
 		    if (idx == 10) {
 			console.log("breaking prematurely");
+			pullingFB.status = false;
 			return;
 		    }
 		    var data = {};
@@ -41,12 +45,17 @@ angular.module('3vent.services', ['firebase']).
 	    );
 	}
 
-	var getEventsInner = function(userId) {
-	    console.log("running getevents inner");
+	var getEventsInner = function(userId, forceRefresh) {
+	    console.log("running getevents inner with forcerefresh " + forceRefresh);
 	    var eventsUrl = "https://creaturefeature.firebaseIO.com/events/"+userId;
 	    var refreshUrl = "https://creaturefeature.firebaseIO.com/refresh/"+userId;
 	    var eventsDB = new Firebase(eventsUrl);
 	    var refreshDB = new Firebase(refreshUrl);
+
+	    if (forceRefresh) {
+		console.log ("forcing refresh");
+		return getEventsLooper(0, eventsDB, refreshDB);
+	    }
 
 	    refreshDB.on('value', function(snapshot) { 
 		console.log("got snapshot");
@@ -64,14 +73,11 @@ angular.module('3vent.services', ['firebase']).
 		getEventsLooper(0, eventsDB, refreshDB);
 	    });
 
-
-
-
-
 	}
 
 	return {
-	    getEvents: getEventsInner
+	    getEvents: getEventsInner,
+	    pullingFB: pullingFB
 	}
 
     }).
@@ -87,7 +93,7 @@ angular.module('3vent.services', ['firebase']).
 		} else if (u) {
 		    // user authenticated with Firebase
 		    console.log('User ID: ' + u.id + ', Provider: ' + u.provider);
-		    cb(u.id);
+		    cb(u);
 		} else {
 		    // user is logged out
 		    console.log("not logged in");
@@ -108,28 +114,3 @@ angular.module('3vent.services', ['firebase']).
 
     });
 	   
-
-//old
-	var fbPager = function(datastore, baseUrl, offset) { 
-            var next = true;
-	    FB.api(baseUrl + "&offset=" +offset, function(resp) { 
-		console.log("running with offset " + offset );
-		if (resp.data) {
-		    _.each(resp.data, function(el) {
-			// console.dir(el);
-			datastore.child(el.id).update(el);
-		    });
-		    if (resp.paging) {
-			next = resp.paging.next;
-		    }
-		    else {
-			next = false;
-		    }
-		    offset = offset + 500;
-		    if (next) {
-			console.log("going to next page");
-			fbPager(datastore, baseUrl,offset);
-		    }
-		} 
-	    });
-	}

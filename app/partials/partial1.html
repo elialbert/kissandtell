@@ -1,11 +1,28 @@
 <div class="container">
-    <div class="pull-right">  
-      <button id="login" ng-click="login()">Log In</button>
-    </div>
 
-  <div class="row">
-    <h1>3vent</h1>
+  <div class="navbar">
+    <a href="#" class="navbar-brand">3vent</a>
+    <p class="navbar-text pull-right">
+      <span ng-show="username">
+	Logged in as {{username}}
+      </span>
+      <span ng-show="!username">
+	<button id="login" ng-click="login()">Log In</button>
+      </span>    
 
+      <span>
+	<div class="btn-group pull-right">
+	  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+	    FB INFO <span class="caret"></span>
+	  </button>
+	  <ul class="dropdown-menu">
+	    <li ng-show="pullingFB">Facebook refresh in progress</li>
+	    <li><a href="javascript:void(0)" ng-show="!pullingFB" ng-click="repullFB()">Refresh events from Facebook</a></li>
+	  </ul>
+	</div>
+      </span>
+
+    </p>
   </div>
   <div class="row">
     <!-- filters -->

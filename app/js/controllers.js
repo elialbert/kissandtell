@@ -15,15 +15,27 @@ angular.module('3vent.controllers',[]).
 	$scope.dtEnds = new Date(dt.getFullYear(), dt.getMonth(), dt.getDate() + 7);
 
 	// pass the data setup to the login callback
-	authService.login( function(userId) {
+	authService.login( function(user) {
+	    var userId = user.id;
+	    $scope.username = user.username;
 	    loadData(userId);
-	    fbData.getEvents(userId);
+	    fbData.getEvents(userId, false);
+	    $scope.userId = userId;
 	});
+
+	$scope.repullFB = function() {
+	    fbData.getEvents($scope.userId, true);
+	}
 
 	// the click handler to login
 	$scope.login = function() {
 	    authService.loginSetup();
 	}
+
+	$scope.$watch( function () { return fbData.pullingFB; }, function (data) {
+	    console.log("in watch: pulling fb is " + data.status);
+	    $scope.pullingFB = data.status;
+	}, true);
 
 	var loadData = function(userId) { 
 	    var url = "https://creaturefeature.firebaseIO.com/events/"+userId;
