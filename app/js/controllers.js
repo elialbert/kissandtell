@@ -9,7 +9,10 @@ angular.module('3vent.controllers',[]).
 	$scope.currentPage = 1;
 	$scope.numPerPage = 10;
 	$scope.maxSize = 5;
-
+	$scope.minInvited = 10;
+	$scope.maxInvited = 200;
+	$scope.minAttending = 20;
+	$scope.maxAttending = 200;
 	$scope.dtStarts = new Date();
 	var dt = new Date();
 	$scope.dtEnds = new Date(dt.getFullYear(), dt.getMonth(), dt.getDate() + 7);
