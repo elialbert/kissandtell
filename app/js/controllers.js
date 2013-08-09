@@ -14,6 +14,7 @@ angular.module('3vent.controllers',[]).
 	$scope.minAttending = 20;
 	$scope.maxAttending = 200;
 	$scope.dtStarts = new Date();
+	$scope.username = null;
 	var dt = new Date();
 	$scope.dtEnds = new Date(dt.getFullYear(), dt.getMonth(), dt.getDate() + 7);
 
@@ -21,9 +22,11 @@ angular.module('3vent.controllers',[]).
 	authService.login( function(user) {
 	    var userId = user.id;
 	    $scope.username = user.username;
+	    console.log("scope username is " + $scope.username + " and pullingFB is " + $scope.pullingFB);
 	    loadData(userId);
 	    fbData.getEvents(userId, false);
 	    $scope.userId = userId;
+	    $scope.$$phase || $scope.$apply(); // why?
 	});
 
 	$scope.repullFB = function() {
@@ -45,6 +48,7 @@ angular.module('3vent.controllers',[]).
 	    var promise = angularFire(url, $scope, 'eventsRaw', {});
 	    // change events to an array bc thats how angular likes it
  	    promise.then(function() {
+		console.log("loaded from angularfire");
 		$scope.events = [];
 		for (var key in $scope.eventsRaw) {
 		    // event preprocessing
@@ -106,8 +110,7 @@ angular.module('3vent.controllers',[]).
 
 	var dateFilters = function(event) { 
 	    var start = Date.parse(event.start_time);
-	    var end = Date.parse(event.end_time);
-	    if ((start < $scope.dtStarts) || (end > $scope.dtEnds)) {
+	    if ((start < $scope.dtStarts) || (start > $scope.dtEnds)) {
 		return false;
 	    }
 	    return true;

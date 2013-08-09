@@ -20,6 +20,7 @@ angular.module('3vent.services', ['firebase']).
 		    console.log("got the events! " + resp.length);
 		    if (!resp.length) {
 			console.log("all fresh out!");
+			console.dir(resp);
 			refreshDB.update({'latest':new Date()});
 			pullingFB.status = false;
 			return;
