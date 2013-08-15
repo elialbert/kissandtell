@@ -16,6 +16,7 @@ angular.module('3vent.controllers',[]).
 	$scope.dtStarts = new Date();
 	$scope.username = null;
 	$scope.whenRadio = "Present";
+
 	var dt = new Date();
 	$scope.dtEnds = new Date(dt.getFullYear(), dt.getMonth(), dt.getDate() + 7);
 
@@ -83,8 +84,29 @@ angular.module('3vent.controllers',[]).
 
 	}
 
-	$scope.sortFunc = function(event) {
+	var dateSort = function(event) {
 	    return Date.parse(event.start_time);
+	};
+	var invitedSort = function(event) {
+	    return event.all_members_count;
+	};
+	var attendingSort = function(event) {
+	    return event.attending_count;
+	};
+	    
+	$scope.sortChoice = "date";
+
+	$scope.sortFunc = function(event) {
+	    if ($scope.sortChoice == "date") {
+		return dateSort(event);
+	    }
+	    if ($scope.sortChoice == "invited") {
+		return invitedSort(event);
+	    }
+	    if ($scope.sortChoice == "attending") {
+		return attendingSort(event);
+	    }
+	    return dateSort(event);	    
 	};
 
 	var numMembers = function(event) {

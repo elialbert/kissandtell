@@ -33,6 +33,14 @@
   width: 40px;
 }
 
+#sortBar {
+    padding: 6px;
+}
+
+#infoBar {
+    padding: 15px;
+}
+
 .filterHeader {
   font-size: 24px; 
   margin-buttom: 10px;
@@ -51,6 +59,11 @@
 
 .navbar {
   background-color: #FFED61;
+}
+
+#innerNav {
+  background-color: #d9edf7;
+  border-color: #bce8f1;
 }
 
 #eventList {
