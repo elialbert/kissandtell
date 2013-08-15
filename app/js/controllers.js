@@ -15,6 +15,7 @@ angular.module('3vent.controllers',[]).
 	$scope.maxAttending = 200;
 	$scope.dtStarts = new Date();
 	$scope.username = null;
+	$scope.whenRadio = "Present";
 	var dt = new Date();
 	$scope.dtEnds = new Date(dt.getFullYear(), dt.getMonth(), dt.getDate() + 7);
 
@@ -109,11 +110,31 @@ angular.module('3vent.controllers',[]).
 	};
 
 	var dateFilters = function(event) { 
-	    var start = Date.parse(event.start_time);
-	    if ((start < $scope.dtStarts) || (start > $scope.dtEnds)) {
-		return false;
+	    if (!event.start_time) {
+		return true; //maybe skip these?
 	    }
-	    return true;
+	    var start = Date.parse(event.start_time);
+
+	    if ($scope.whenRadio == "Past") {
+		if ((start < $scope.dtStarts) || (start > $scope.dtEnds)) {
+		    return true
+		}
+		return false
+	    }
+
+	    if ($scope.whenRadio == "Present") {
+		if ((start > $scope.dtStarts) && (start < $scope.dtEnds)) {
+		    return true;
+		}
+		return false
+	    }
+
+	    if ($scope.whenRadio == "Future") { 
+		if (start > $scope.dtEnds) {
+		    return true
+		}
+		return false
+	    }
 	}
 
 	var locationFilters = function(event) {

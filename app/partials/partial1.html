@@ -64,11 +64,18 @@
 	  <div class="panel-heading">
 	    <span class="navHeader">When</span>
 	  </div>
+	  <div class="btn-group whenButtons">
+            <button type="button" class="btn btn-primary" ng-model="whenRadio" btn-radio="'Past'">Past</button>
+            <button type="button" class="btn btn-primary" ng-model="whenRadio" btn-radio="'Present'">Present</button>
+	    <button type="button" class="btn btn-primary" ng-model="whenRadio" btn-radio="'Future'">Future</button>
+	  </div>
+  <!-- old date picker
 	  starts after:
 	  <datepicker ng-model="dtStarts" show-weeks="true" starting-day="1" max="'2015-06-22'"></datepicker>
 	  
 	  starts before:
 	  <datepicker ng-model="dtEnds" show-weeks="true" starting-day="1" max="'2015-06-22'"></datepicker>
+-->
 
 	</div>
 
