@@ -74,6 +74,7 @@ angular.module('3vent.controllers',[]).
 			e.venueString = e.venueString + ", " + e.venue[key];
 		    }
 		    e.pretty_location = e.location || e.venueString;
+		    e.full_location = e.location + " " + e.venueString;
 		    $scope.events.push(e);
 		}
 
@@ -174,7 +175,7 @@ angular.module('3vent.controllers',[]).
 	    if (!$scope.locationSearchQuery) {
 		return true;
 	    }
-	    return event.pretty_location && event.pretty_location.toLowerCase().indexOf($scope.locationSearchQuery.toLowerCase()) >= 0;
+	    return event.full_location && event.full_location.toLowerCase().indexOf($scope.locationSearchQuery.toLowerCase()) >= 0;
 	};
 
   }])
