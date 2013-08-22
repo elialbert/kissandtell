@@ -10,9 +10,9 @@ angular.module('3vent.controllers',[]).
 	$scope.numPerPage = 10;
 	$scope.maxSize = 5;
 	$scope.minInvited = 10;
-	$scope.maxInvited = 200;
+	$scope.maxInvited = 2000;
 	$scope.minAttending = 20;
-	$scope.maxAttending = 200;
+	$scope.maxAttending = 2000;
 	$scope.dtStarts = new Date();
 	$scope.username = null;
 	$scope.whenRadio = "Present";
