@@ -10,9 +10,9 @@ angular.module('3vent.controllers',[]).
 	$scope.numPerPage = 10;
 	$scope.maxSize = 5;
 	$scope.minInvited = 10;
-	$scope.maxInvited = 2000;
+	$scope.maxInvited = 200;
 	$scope.minAttending = 20;
-	$scope.maxAttending = 2000;
+	$scope.maxAttending = 200;
 	$scope.dtStarts = new Date();
 	$scope.username = null;
 	$scope.whenRadio = "Present";
@@ -43,6 +43,17 @@ angular.module('3vent.controllers',[]).
 	$scope.$watch( function () { return fbData.pullingFB; }, function (data) {
 	    console.log("in watch: pulling fb is " + data.status);
 	    $scope.pullingFB = data.status;
+	}, true);
+
+	$scope.$watch( function () { return $scope.maxAttending; }, function (data) {
+	    if ($scope.maxAttending == 400) { 
+		$scope.maxAttending = null;
+	    }
+	}, true);
+	$scope.$watch( function () { return $scope.maxInvited; }, function (data) {
+	    if ($scope.maxInvited == 400) { 
+		$scope.maxInvited = null;
+	    }
 	}, true);
 
 	var loadData = function(userId) { 
