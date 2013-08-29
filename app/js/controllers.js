@@ -16,6 +16,7 @@ angular.module('3vent.controllers',[]).
 	$scope.dtStarts = new Date();
 	$scope.username = null;
 	$scope.whenRadio = "Present";
+	$scope.triedFB = false;
 
 	var dt = new Date();
 	$scope.dtEnds = new Date(dt.getFullYear(), dt.getMonth(), dt.getDate() + 7);
@@ -43,6 +44,9 @@ angular.module('3vent.controllers',[]).
 	$scope.$watch( function () { return fbData.pullingFB; }, function (data) {
 	    console.log("in watch: pulling fb is " + data.status);
 	    $scope.pullingFB = data.status;
+	    if ($scope.pullingFB == false) {
+		$scope.triedFB = true;
+	    }
 	}, true);
 
 	$scope.$watch( function () { return $scope.maxAttending; }, function (data) {

@@ -10,7 +10,7 @@ angular.module('3vent.services', ['firebase']).
 	var late = Math.round(new Date().setDate(new Date().getDate() + 21) / 1000);
 	var step = 100;
 	var pullingFB = {};
-	var getEventsLooper = function(idx, eventsDB, refreshDB) {
+	var getEventsLooper = function(idx, eventsDB, refreshDB, tries) {
 	    console.log("setting pullingfb to true, step is " + step);
 	    pullingFB.status=true;
 	    console.log("in getEventsLooper, idx is " + idx);
@@ -25,13 +25,15 @@ angular.module('3vent.services', ['firebase']).
 			var extra_data = {};
 			console.dir(resp);
 			console.log("preparing self event data to update");
-			_.each(resp, function(el) {
-			    // eventsDB.child(el.eid).update(el); //very slow way
-			    el.selfEvent = true;
-			    data[el.eid] = el;
-			});			
-			console.log("self data is ");
-			console.dir(data);
+			if (resp.error) {
+			    console.log("pulling self events error is: " + error);
+			}
+			else {
+			    _.each(resp, function(el) {
+				el.selfEvent = true;
+				data[el.eid] = el;
+			    });			
+			}
 		    }
 
 
@@ -52,9 +54,12 @@ angular.module('3vent.services', ['firebase']).
 		    console.log("got the events! " + resp.length);
 		    if (!resp.length) {
 			if (resp.error) {
+			    if (tries > 2) {
+				return
+			    }
 			    console.log("error - " + resp.error.message);
 			    step = Math.round(step / 2);
-			    return getEventsLooper(idx, eventsDB, refreshDB);
+			    return getEventsLooper(idx, eventsDB, refreshDB, tries+1);
 			}
 			else {
 			    console.log("all fresh out!");
@@ -82,7 +87,7 @@ angular.module('3vent.services', ['firebase']).
 			step += 10;
 		    }
 		    
-		    return getEventsLooper(idx+1, eventsDB, refreshDB);
+		    return getEventsLooper(idx+1, eventsDB, refreshDB, 0);
 		    
 
 		}
@@ -98,7 +103,7 @@ angular.module('3vent.services', ['firebase']).
 
 	    if (forceRefresh) {
 		console.log ("forcing refresh");
-		return getEventsLooper(0, eventsDB, refreshDB);
+		return getEventsLooper(0, eventsDB, refreshDB, 0);
 	    }
 
 	    refreshDB.on('value', function(snapshot) { 
@@ -114,7 +119,7 @@ angular.module('3vent.services', ['firebase']).
 		    }
 		}
 		console.log ("on to eventsl ooperS");
-		getEventsLooper(0, eventsDB, refreshDB);
+		getEventsLooper(0, eventsDB, refreshDB, 0);
 	    });
 
 	}

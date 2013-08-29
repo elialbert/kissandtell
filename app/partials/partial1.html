@@ -9,19 +9,6 @@
       <span ng-show="!username && !pullingFB">
 	<button id="login" ng-click="login()">Log In</button>
       </span>    
-
-      <span>
-	<div  ng-show="username" class="btn-group pull-right fbdrop">
-	  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-	    FB INFO <span class="caret"></span>
-	  </button>
-	  <ul class="dropdown-menu">
-	    <li ng-show="pullingFB">Facebook refresh in progress</li>
-	    <li><a href="javascript:void(0)" ng-show="!pullingFB" ng-click="repullFB()">Refresh events from Facebook</a></li>
-	  </ul>
-	</div>
-      </span>
-
     </p>
   </div>
   <div class="row">
@@ -85,6 +72,9 @@
 	  <span class="pull-right" ng-show="!events.length && !username && !pullingFB">
 	  Please log in.
 	  </span>
+	  <span class="pull-right" ng-show="!events.length && username && !pullingFB && triedFB">
+	  Woops! we had an error because Facebook's API is testy. please refresh, it'll usually work from now on.
+	  </span>
 	</div>
 	<div class="col-lg-5 pull-right" id="sortBar">
 	  Sort By: 
@@ -93,9 +83,19 @@
             <button type="button" class="btn btn-primary" ng-model="sortChoice" btn-radio="'invited'">Invited</button>
 	    <button type="button" class="btn btn-primary" ng-model="sortChoice" btn-radio="'attending'">Attending</button>
 	  </div>
-
-
 	</div>
+	<div ng-show="username" class="col-lg-3 btn-group pull-right fbdrop">
+	  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+	      FB INFO <span class="caret"></span>
+	  </button>
+	  <ul class="dropdown-menu">
+	    <li ng-show="pullingFB">Facebook refresh in progress</li>
+	    <li><a href="javascript:void(0)" ng-show="!pullingFB" ng-click="repullFB()">Refresh events from Facebook</a></li>
+	  </ul>
+	</div>
+
+
+
 
 
       </div>
