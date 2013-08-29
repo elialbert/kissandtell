@@ -1,6 +1,6 @@
 <div class="container">
 
-  <div class="navbar">
+  <div class="navbar" id="mainNav">
     <a href="#" class="navbar-brand">3vent</a>
     <p class="navbar-text pull-right">
       <span ng-show="username">
@@ -102,8 +102,8 @@
       <ul class="eventListUL">    
 	<li ng-repeat="event in (filteredVar = (events | filter:filters) | orderBy:sortFunc | startFrom:(currentPage-1)*numPerPage | limitTo:numPerPage)">
 	  <div class="panel panel-primary">
-	    <div class="panel-heading">
-	      <a class="eventLink" href="http://facebook.com/events/{{event.eid}}"><h4>{{event.name}}</h4></a>
+	    <div class="panel-heading" id="eventPanel">
+	      <a class="eventLink" href="http://facebook.com/events/{{event.eid}}"><h4 id="eventTitle">{{event.name}}</h4></a>
 	    </div>
 	      <img src="{{event.pic}}" class="pull-right eventImg"></img>
 

@@ -52,27 +52,35 @@
   font-size: 24px;
 }
 
-.filterBody {
-  /*background-color: #4FE8AA;
-  color: #5D2EFF;*/
+div.panel.panel-info div.panel-heading {
+  background-color: #648899; /* grayseablue */
+  color: #98FFE7; /*lighterblue*/
 }
 
-.navbar {
-  background-color: #FFED61;
+#eventPanel {
+  background-color: #FFDCD7; /* graytan */
+  color: #98FFE7 /* light blue */
+}
+#eventTitle {
+  color: #CC6573 /* maroon */
 }
 
 #innerNav {
-  background-color: #d9edf7;
-  border-color: #bce8f1;
+  background-color: #648899; /* grayseablue */
+  /*border-color: #bce8f1;*/
+  color: #98FFE7; /*lighterblue*/
+}
+
+#mainNav {
+  background-color: #65ACCC /*medium blue */
+  color: #FFDCD7 /* graytan */
 }
 
 #eventList {
 
 }
 
-.eventLink {
-    color: white;
-}
+
 
 .eventImg {
     width: 100px;
@@ -88,7 +96,7 @@
 
 .eventListUL {
   list-style-type: none;
-  margin-left: -30px;
+  margin-left: -40px;
 }
 
 .whenButtons button.btn {
