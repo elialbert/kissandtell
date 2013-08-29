@@ -54,12 +54,12 @@
 
 div.panel.panel-info div.panel-heading {
   background-color: #648899; /* grayseablue */
-  color: #98FFE7; /*lighterblue*/
+  color: #FFDCD7; /* graytan */
 }
 
 #eventPanel {
-  background-color: #FFDCD7; /* graytan */
-  color: #98FFE7 /* light blue */
+  background-color: #98FFE7; /*lighterblue*/
+  color: #65ACCC /*medium blue */
 }
 #eventTitle {
   color: #CC6573 /* maroon */
@@ -68,11 +68,11 @@ div.panel.panel-info div.panel-heading {
 #innerNav {
   background-color: #648899; /* grayseablue */
   /*border-color: #bce8f1;*/
-  color: #98FFE7; /*lighterblue*/
+  color: #FFDCD7; /* graytan */
 }
 
 #mainNav {
-  background-color: #65ACCC /*medium blue */
+  background-color: #98FFE7; /* light blue */
   color: #FFDCD7 /* graytan */
 }
 
