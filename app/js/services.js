@@ -9,17 +9,18 @@ angular.module('3vent.services', ['firebase']).
 	var early = Math.round(new Date().setDate(new Date().getDate() - 1) / 1000);
 	var late = Math.round(new Date().setDate(new Date().getDate() + 21) / 1000);
 	var step = 100;
-	var pullingFB = {};
-	var getEventsLooper = function(idx, eventsDB, refreshDB, tries) {
+	var pullingFB = {status:1};
+	var getEventsLooper = function(idx, user, eventsDB, refreshDB, tries) {
 	    console.log("setting pullingfb to true, step is " + step);
-	    pullingFB.status=true;
+	    
 	    console.log("in getEventsLooper, idx is " + idx);
 	    var data = {};
 	    if (idx == 0) {
 		FB.api(
 		    {
 			method: 'fql.query',
-			query: "SELECT eid, name, description, start_time, location, all_members_count, attending_count, creator, declined_count, end_time, has_profile_pic, host, pic, venue FROM event WHERE start_time >= " + early + " AND start_time <= " + late + " AND eid IN (SELECT eid FROM event_member WHERE uid=me())"
+			query: "SELECT eid, name, description, start_time, location, all_members_count, attending_count, creator, declined_count, end_time, has_profile_pic, host, pic, venue FROM event WHERE start_time >= " + early + " AND start_time <= " + late + " AND eid IN (SELECT eid FROM event_member WHERE uid=me())",
+			access_token: user.accessToken
 		    },
 		    function(resp) {
 			var extra_data = {};
@@ -48,18 +49,21 @@ angular.module('3vent.services', ['firebase']).
 		    method: 'fql.query',
 		    
 		    //query: 'SELECT uid2 FROM friend WHERE uid1=me()' // for testing
-		    query: "SELECT eid, name, description, start_time, location, all_members_count, attending_count, creator, declined_count, end_time, has_profile_pic, host, pic, venue FROM event WHERE start_time >= " + early + " AND start_time <= " + late + " AND eid IN (SELECT eid FROM event_member WHERE uid IN (SELECT uid2 FROM friend WHERE uid1=me() limit " + step + " offset " + idx*step + "))"
+		    query: "SELECT eid, name, description, start_time, location, all_members_count, attending_count, creator, declined_count, end_time, has_profile_pic, host, pic, venue FROM event WHERE start_time >= " + early + " AND start_time <= " + late + " AND eid IN (SELECT eid FROM event_member WHERE uid IN (SELECT uid2 FROM friend WHERE uid1=me() limit " + step + " offset " + idx*step + "))",
+		    access_token: user.accessToken
+		    
 		},
 		function(resp) {
 		    console.log("got the events! " + resp.length);
 		    if (!resp.length) {
-			if (resp.error) {
+			if (resp.error || resp.error_code) {
 			    if (tries > 2) {
 				return
 			    }
-			    console.log("error - " + resp.error.message);
+			    console.log("error - " + resp.error);
+			    console.dir(resp);
 			    step = Math.round(step / 2);
-			    return getEventsLooper(idx, eventsDB, refreshDB, tries+1);
+			    return getEventsLooper(idx, user, eventsDB, refreshDB, tries+1);
 			}
 			else {
 			    console.log("all fresh out!");
@@ -69,7 +73,11 @@ angular.module('3vent.services', ['firebase']).
 			    return;
 			}
 		    }
-		    if (idx == 20) {
+		    console.log ("UPDATINGGGGG");
+
+		    pullingFB.status += 1;
+		    console.dir(pullingFB);
+		    if (idx == 2) { 
 			console.log("breaking prematurely");
 			pullingFB.status = false;
 			return;
@@ -87,14 +95,15 @@ angular.module('3vent.services', ['firebase']).
 			step += 10;
 		    }
 		    
-		    return getEventsLooper(idx+1, eventsDB, refreshDB, 0);
+		    return getEventsLooper(idx+1, user, eventsDB, refreshDB, 0);
 		    
 
 		}
 	    );
 	}
 
-	var getEventsInner = function(userId, forceRefresh) {
+	var getEventsInner = function(user, forceRefresh) {
+	    var userId = user.id;
 	    console.log("running getevents inner with forcerefresh " + forceRefresh);
 	    var eventsUrl = "https://creaturefeature.firebaseIO.com/events/"+userId;
 	    var refreshUrl = "https://creaturefeature.firebaseIO.com/refresh/"+userId;
@@ -103,7 +112,7 @@ angular.module('3vent.services', ['firebase']).
 
 	    if (forceRefresh) {
 		console.log ("forcing refresh");
-		return getEventsLooper(0, eventsDB, refreshDB, 0);
+		return getEventsLooper(0, user, eventsDB, refreshDB, 0);
 	    }
 
 	    refreshDB.on('value', function(snapshot) { 
@@ -119,7 +128,7 @@ angular.module('3vent.services', ['firebase']).
 		    }
 		}
 		console.log ("on to eventsl ooperS");
-		getEventsLooper(0, eventsDB, refreshDB, 0);
+		getEventsLooper(0, user, eventsDB, refreshDB, 0);
 	    });
 
 	}

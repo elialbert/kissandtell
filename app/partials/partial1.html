@@ -3,10 +3,10 @@
   <div class="navbar">
     <a href="#" class="navbar-brand">3vent</a>
     <p class="navbar-text pull-right">
-      <span ng-show="username || pullingFB">
+      <span ng-show="username">
 	Logged in as {{username}}
       </span>
-      <span ng-show="!username && !pullingFB">
+      <span ng-show="!username">
 	<button id="login" ng-click="login()">Log In</button>
       </span>    
     </p>
@@ -66,10 +66,10 @@
       <div class="navbar" id="innerNav">
 	<div class="col-lg-2 pull-right" id="infoBar">
 	  <span class="pull-right" ng-show="filteredVar.length">Found: {{filteredVar.length}} </span>
-	  <span class="pull-right" ng-show="!events.length && (username || pullingFB)">
+	  <span class="pull-right" ng-show="!events.length && username && pullingFB">
 	    Loading...
 	  </span>
-	  <span class="pull-right" ng-show="!events.length && !username && !pullingFB">
+	  <span class="pull-right" ng-show="!events.length && !username">
 	  Please log in.
 	  </span>
 	  <span class="pull-right" ng-show="!events.length && username && !pullingFB && triedFB">
