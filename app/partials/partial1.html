@@ -84,9 +84,9 @@
 	    <button type="button" class="btn btn-primary" ng-model="sortChoice" btn-radio="'attending'">Attending</button>
 	  </div>
 	</div>
-	<div ng-show="username" class="col-lg-3 btn-group pull-right fbdrop">
+	<div ng-show="username" class="col-lg-5 btn-group pull-right fbdrop">
 	  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-	      FB INFO <span class="caret"></span>
+	      {{loadingMessage}} <span class="caret"></span>
 	  </button>
 	  <ul class="dropdown-menu">
 	    <li ng-show="pullingFB">Facebook refresh in progress</li>

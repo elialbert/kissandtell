@@ -17,6 +17,7 @@ angular.module('3vent.controllers',[]).
 	$scope.username = null;
 	$scope.whenRadio = "Present";
 	$scope.triedFB = false;
+	$scope.loadingMessage = "Data up to date";
 
 	var dt = new Date();
 	$scope.dtEnds = new Date(dt.getFullYear(), dt.getMonth(), dt.getDate() + 7);
@@ -24,10 +25,11 @@ angular.module('3vent.controllers',[]).
 	var pullData = function(user) {
 	    var userId = user.id;
 	    $scope.username = user.username;
-	    console.log("scope username is " + $scope.username + " and pullingFB is " + $scope.pullingFB);
+	    console.log("scope username is " + $scope.username + " and pullingFB is " + $scope.pullingFB + " and user id is " + userId);
 	    $scope.userId = userId;
 	    $scope.user = user;
 	    loadData(userId);
+	    $scope.loadingMessage = "Loading...";
 	    fbData.getEvents(user, false);
 	    $scope.$$phase || $scope.$apply(); // why?
 	};
@@ -41,17 +43,20 @@ angular.module('3vent.controllers',[]).
 	}
 
 	$scope.$watch( function () { return fbData.pullingFB; }, function (data) {
-	    console.log("in watch: pulling fb is " + data.status);
 	    $scope.pullingFB = data.status;
-	    console.log ("IN WATCH! user id is " + $scope.userId);
 	    loadData($scope.userId);
 	    if ($scope.pullingFB == false) {
 		$scope.triedFB = true;
+		$scope.loadingMessage = "Data up to date";
+	    }
+	    else {
+		$scope.loadingMessage = "Loading page " + $scope.pullingFB + " from facebook...";	
 	    }
 	}, true);
 
 	$scope.repullFB = function() {
-	    fbData.getEvents($scope.userId, true);
+	    $scope.loadingMessage = "Loading...";	
+	    fbData.getEvents($scope.user, true);
 	}
 
 	$scope.$watch( function () { return $scope.maxAttending; }, function (data) {
@@ -69,16 +74,14 @@ angular.module('3vent.controllers',[]).
 	var promise = null;
 
 	var loadData = function(userId) { 
-	    console.log("hello LOADDATA");
 	    if (!userId) {
 		return
 	    }
 	    var url = "https://creaturefeature.firebaseIO.com/events/"+userId;
-	    promise = angularFire(url, $scope, 'eventsRaw', {});
-	    console.log ("set load data!");
-
+	    if (!promise) {
+		promise = angularFire(url, $scope, 'eventsRaw', {});
+	    }
 	    promise.then(function() {
-		console.log("loaded from angularfire");
 		$scope.events = [];
 		for (var key in $scope.eventsRaw) {
 		    // event preprocessing
@@ -100,18 +103,13 @@ angular.module('3vent.controllers',[]).
 		};
 
 	    });    
-
-
-	    // change events to an array bc thats how angular likes it
 	}
 	
 	$scope.filters = function(event) {
-	    //console.log("scope info: " + $scope.minInvited + ", " + $scope.maxInvited + ", " + $scope.textSearchQuery);
 	    var res1 = numMembers(event);
 	    var res2 = textSearch(event);
 	    var res3 = dateFilters(event);
 	    var res4 = locationFilters(event);
-	    // console.log ("res1 is " + res1 + " and res2 is " + res2);
 	    return res1 && res2 && res3 && res4;
 
 	}

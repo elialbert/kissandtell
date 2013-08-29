@@ -4,16 +4,12 @@
 
 angular.module('3vent.services', ['firebase']).
     service("fbData", function() {
-	console.log("running loaddata service");
 	var dt = new Date();
 	var early = Math.round(new Date().setDate(new Date().getDate() - 1) / 1000);
 	var late = Math.round(new Date().setDate(new Date().getDate() + 21) / 1000);
 	var step = 100;
 	var pullingFB = {status:1};
 	var getEventsLooper = function(idx, user, eventsDB, refreshDB, tries) {
-	    console.log("setting pullingfb to true, step is " + step);
-	    
-	    console.log("in getEventsLooper, idx is " + idx);
 	    var data = {};
 	    if (idx == 0) {
 		FB.api(
@@ -24,10 +20,9 @@ angular.module('3vent.services', ['firebase']).
 		    },
 		    function(resp) {
 			var extra_data = {};
-			console.dir(resp);
-			console.log("preparing self event data to update");
-			if (resp.error) {
+			if (resp.error || resp.error_code) {
 			    console.log("pulling self events error is: " + error);
+			    console.dir(resp)
 			}
 			else {
 			    _.each(resp, function(el) {
@@ -54,7 +49,6 @@ angular.module('3vent.services', ['firebase']).
 		    
 		},
 		function(resp) {
-		    console.log("got the events! " + resp.length);
 		    if (!resp.length) {
 			if (resp.error || resp.error_code) {
 			    if (tries > 2) {
@@ -66,31 +60,23 @@ angular.module('3vent.services', ['firebase']).
 			    return getEventsLooper(idx, user, eventsDB, refreshDB, tries+1);
 			}
 			else {
-			    console.log("all fresh out!");
-			    console.dir(resp);
 			    refreshDB.update({'latest':new Date()});
 			    pullingFB.status = false;
 			    return;
 			}
 		    }
-		    console.log ("UPDATINGGGGG");
 
 		    pullingFB.status += 1;
-		    console.dir(pullingFB);
-		    if (idx == 2) { 
+		    if (idx == 20) { 
 			console.log("breaking prematurely");
 			pullingFB.status = false;
 			return;
 		    }
-		    console.log("preparing event data to update");
 		    _.each(resp, function(el) {
-			// eventsDB.child(el.eid).update(el); //very slow way
 			el.selfEvent = false;
 			data[el.eid] = el;
 		    });
-		    console.log("running big update");
 		    eventsDB.update(data);
-		    console.log("done with big update");
 		    if (step < 100) {
 			step += 10;
 		    }
@@ -104,30 +90,25 @@ angular.module('3vent.services', ['firebase']).
 
 	var getEventsInner = function(user, forceRefresh) {
 	    var userId = user.id;
-	    console.log("running getevents inner with forcerefresh " + forceRefresh);
 	    var eventsUrl = "https://creaturefeature.firebaseIO.com/events/"+userId;
 	    var refreshUrl = "https://creaturefeature.firebaseIO.com/refresh/"+userId;
 	    var eventsDB = new Firebase(eventsUrl);
 	    var refreshDB = new Firebase(refreshUrl);
 
 	    if (forceRefresh) {
-		console.log ("forcing refresh");
 		return getEventsLooper(0, user, eventsDB, refreshDB, 0);
 	    }
 
 	    refreshDB.on('value', function(snapshot) { 
-		console.log("got snapshot");
 		refreshDB.off('value')
 		if (snapshot.val()) {
 		    var latestDate = Date.parse(snapshot.val().latest);
 		    var now = new Date();
-		    console.log ("found latest date " + latestDate); 
 		    if ((now - latestDate) < 120*60*1000 ) { 
-			console.log ("refreshed in the last hour!");
+			pullingFB.status = false;
 			return
 		    }
 		}
-		console.log ("on to eventsl ooperS");
 		getEventsLooper(0, user, eventsDB, refreshDB, 0);
 	    });
 
