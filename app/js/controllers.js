@@ -86,8 +86,13 @@ angular.module('3vent.controllers',[]).
 		for (var key in $scope.eventsRaw) {
 		    // event preprocessing
 		    var e = $scope.eventsRaw[key];
-		    var d = new Date(e.start_time);
-		    e.pretty_start = dateFormat(d, "dddd, mmmm dS, yyyy, h:MM TT Z");
+		    try {
+			var d = new Date(e.start_time);
+			e.pretty_start = dateFormat(d, "dddd, mmmm dS, yyyy, h:MM TT Z");
+		    }
+		    catch(err) {
+			e.pretty_start = "unknown";
+		    }			
 		    
 		    e.venueString = '';
 		    for (var key in e.venue) { 
